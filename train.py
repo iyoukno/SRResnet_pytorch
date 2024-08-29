@@ -9,7 +9,7 @@ from torch.optim import Adam
 from net import SRResNet
 from datasets import PreprocessDataset
 from torch.utils.data import DataLoader
-import tqdm
+from tqdm import tqdm
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 class Trainer():
@@ -48,3 +48,8 @@ class Trainer():
             avg_loss = e_loss / len(self.dataloader)
             torch.save(net.state_dict(), f'./train_dir/{e}.pth')
             print(f'model save success, epoch: {e} loss {avg_loss}')
+
+if __name__ == '__main__':
+    ds_path = r'E:\BaiduNetdiskDownload\data\Urban100\HR'
+    trainer = Trainer(ds_path,batch=4)
+    trainer.train(20)

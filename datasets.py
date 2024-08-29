@@ -24,7 +24,7 @@ class PreprocessDataset(Dataset):
 
         for _, _, files in os.walk(imgPath):
             # ex变量是用于扩充数据集的，在这里默认的是扩充十倍
-            self.imgs = [imgPath + file for file in files] * ex
+            self.imgs = [os.path.join(imgPath, file) for file in files] * ex
 
         np.random.shuffle(self.imgs)  # 随机打乱
 
@@ -40,3 +40,9 @@ class PreprocessDataset(Dataset):
         sourceImg = self.transforms(tempImg)  # 对原始图像进行处理
         cropImg = torch.nn.MaxPool2d(4)(sourceImg)
         return cropImg, sourceImg
+
+if __name__ == '__main__':
+    path = r'E:\BaiduNetdiskDownload\data\Urban100\HR'
+    d = PreprocessDataset(path)
+    crop_img, img = d[0]
+    print(crop_img)
