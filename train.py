@@ -31,6 +31,7 @@ class Trainer():
         net = self.net.to(DEVICE)
         net.train()
 
+        min_loss = 999
         for e in range(epoch):
             e_loss = 0
 
@@ -46,10 +47,13 @@ class Trainer():
                 loss.backward()
                 self.optimizer.step()
             avg_loss = e_loss / len(self.dataloader)
+            if avg_loss < min_loss:
+                min_loss = avg_loss
+                torch.save(net.state_dict(), f'./train_dir/best.pth')
             torch.save(net.state_dict(), f'./train_dir/{e}.pth')
             print(f'model save success, epoch: {e} loss {avg_loss}')
 
 if __name__ == '__main__':
     ds_path = r'E:\BaiduNetdiskDownload\data\Urban100\HR'
     trainer = Trainer(ds_path,batch=4)
-    trainer.train(20)
+    trainer.train(100)

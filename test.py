@@ -18,11 +18,11 @@ transform = transforms.Compose([transforms.ToTensor()])
 
 # load model
 m = SRResNet()
-model_state_dict = torch.load('./train_dir/best.pth')
+model_state_dict = torch.load('./train_dir/best1.pth', map_location='cpu')
 m.load_state_dict(state_dict=model_state_dict)
 m.eval()
 # read img
-img = Image.open(r'E:\BaiduNetdiskDownload\data\Set14\image_SRF_4\LR\img_004.png')
+img = Image.open(r'E:\BaiduNetdiskDownload\data\Set14\image_SRF_4\LR\img_005.png')
 
 img = transform(img)
 img = torch.unsqueeze(img,dim=0)

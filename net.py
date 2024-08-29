@@ -21,7 +21,7 @@ class ResBlock(nn.Module):
         self.bn2 = nn.BatchNorm2d(outChannals)
         self.relu2 = nn.PReLU()
         # self.conv3 = nn.Conv2d(outChannals, outChannals, kernel_size=1, bias=False)
-        self.relu = nn.PReLU()
+        # self.relu = nn.PReLU()
 
     def forward(self, x):
         """前向传播过程"""
@@ -38,7 +38,7 @@ class ResBlock(nn.Module):
         # out = self.conv3(x)
 
         out += resudial
-        out = self.relu(out)
+        # out = self.relu(out)
         return out
 
 
@@ -53,22 +53,22 @@ class SRResNet(nn.Module):
         self.conv1 = nn.Conv2d(3, 64, kernel_size=9, padding=4, padding_mode='reflect', stride=1)
         self.relu = nn.PReLU()
         # 残差模块
-        self.resBlock = nn.ModuleList(ResBlock(64,64) for i in range(6))
+        self.resBlock = nn.ModuleList(ResBlock(64,64) for i in range(16))
         # 卷积模块2
         self.conv2 = nn.Conv2d(64, 64, kernel_size=1, stride=1)
         self.bn2 = nn.BatchNorm2d(64)
-        self.relu2 = nn.PReLU()
+        # self.relu2 = nn.PReLU()
 
         # 子像素卷积
-        self.convPos1 = nn.Conv2d(64, 256, kernel_size=3, stride=1, padding=2, padding_mode='reflect')
+        self.convPos1 = nn.Conv2d(64, 256, kernel_size=3, stride=1, padding=2, padding_mode='reflect', bias=False)
         self.pixelShuffler1 = nn.PixelShuffle(2)
         self.reluPos1 = nn.PReLU()
 
-        self.convPos2 = nn.Conv2d(64, 256, kernel_size=3, stride=1, padding=1, padding_mode='reflect')
+        self.convPos2 = nn.Conv2d(64, 256, kernel_size=3, stride=1, padding=1, padding_mode='reflect', bias=False)
         self.pixelShuffler2 = nn.PixelShuffle(2)
         self.reluPos2 = nn.PReLU()
 
-        self.finConv = nn.Conv2d(64, 3, kernel_size=9, stride=1)
+        self.finConv = nn.Conv2d(64, 3, kernel_size=9, stride=1, padding=4, bias=False)
 
     def forward(self, x):
         """前向传播过程"""
